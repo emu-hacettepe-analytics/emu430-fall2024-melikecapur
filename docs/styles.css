@@ -1,1 +1,50 @@
-/* css styles */
+/* CSS stilleri */
+
+/* Başlık barı için stil ayarı */
+.header, .navbar {
+  background-color: #4B2C5B; /* Koyu mor rengi */
+}
+
+/* Başlık barındaki bağlantıların rengi */
+.header a, .navbar a {
+  color: #99FF66; /* Bağlantı rengi yeşil */
+  text-decoration: none; /* Alt çizgiyi kaldır */
+}
+
+/* Başlık ve alt başlıkların rengi */
+h1, h2, h3 {
+  color: #99FF66; /* Başlık rengi yeşil */
+}
+
+/* Paragrafların rengi ve font stili */
+p {
+  color: #D8BFD8; /* Paragraf rengi daha belirgin lila */
+  font-family: 'Lora', serif; /* Yazı tipi ayarı Lora */
+}
+
+/* Alt başlık rengi */
+h4, h5, h6 {
+  color: #D8BFD8; /* Alt başlık rengi belirgin lila */
+}
+
+/* Linklere fare ile gelindiğinde efekt */
+.header a:hover, .navbar a:hover {
+  color: #99FF66; /* Hover rengi yeşil */
+}
+
+/* Buton stil ayarları */
+button {
+  background-color: #99FF66; /* Buton arka plan rengi yeşil */
+  color: #4B2C5B; /* Buton yazı rengi koyu mor */
+  border: none; /* Kenarlıkları kaldır */
+  padding: 10px 20px; /* İç boşluk */
+  border-radius: 5px; /* Kenar yuvarlama */
+  cursor: pointer; /* İmleci değiştir */
+}
+
+/* Buton hover efekti */
+button:hover {
+  background-color: #4B2C5B; /* Hover'da arka plan koyu mor */
+  color: #D8BFD8; /* Hover'da yazı rengi belirgin lila */
+}
+

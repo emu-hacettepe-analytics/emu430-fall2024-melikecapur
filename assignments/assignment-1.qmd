@@ -2,14 +2,130 @@
 title: "Assignment 1"
 ---
 
-# Assignment 1
-
-```{r}
-1 + 1
-```
-
 My first assignment has two parts.
 
 ## (a)
 
+I choose the video of Veri Bilimi ve Endüstri Mühendisliği Üzerine Sohbetler - Mustafa Baydoğan & Erdi Daşdemir.
+
+This video comprehensively explains the relationship between data science and industrial engineering, detailing how data science can be integrated into industrial processes. The participants discuss how data analytics is utilized in areas such as production, supply chain management, and quality control, and how these applications improve processes. Additionally, attention is drawn to the role of machine learning and artificial intelligence within data science, emphasizing how industrial engineers can extract value from data using these technologies. Future trends, including data security and data ethics, are highlighted, along with the need for continuous learning and the development of data science skills. Overall, the video deeply examines the potential of data science and the value it creates when combined with industrial engineering.\
+
+**Open-Ended Question:**\
+In what ways can data science improve decision-making in industrial engineering, and what skills do engineers need to develop to effectively use data science?
+
+**Answer:**\
+Data science can improve decision-making in industrial engineering by providing insights through data analysis, leading to better predictions and more efficient processes. Engineers need to develop skills in data analysis, statistical methods, and familiarity with data science tools to effectively use data science in their work.\
+
+**Multiple-Choice Question:**\
+What is one benefit of using data science in industrial engineering?\
+**A**. It makes decisions based solely on intuition.\
+**B**. It helps identify problems before they occur.\
+**C**. It eliminates the need for engineers.\
+**D**. It only analyzes past data without making predictions.\
+\
+**Correct Answer:**\
+**B**. It helps identify problems before they occur.\
+
 ## (b)
+
+```         
+> library(dslabs)
+> data("polls_us_election_2016")
+> head(polls_us_election_2016, 10)
+
+  state  startdate    enddate                                          pollster
+1  U.S. 2016-11-03 2016-11-06                          ABC News/Washington Post
+2  U.S. 2016-11-01 2016-11-07                           Google Consumer Surveys
+3  U.S. 2016-11-02 2016-11-06                                             Ipsos
+4  U.S. 2016-11-04 2016-11-07                                            YouGov
+5  U.S. 2016-11-03 2016-11-06                                  Gravis Marketing
+6  U.S. 2016-11-03 2016-11-06 Fox News/Anderson Robbins Research/Shaw & Company Research
+7  U.S. 2016-11-02 2016-11-06                            CBS News/NewYork Times
+8  U.S. 2016-11-03 2016-11-05                      NBC News/Wall Street Journal
+9  New Mexico 2016-11-06 2016-11-06                                    Zia Poll
+10 U.S. 2016-11-04 2016-11-07                                          IBD/TIPP
+  grade samplesize population rawpoll_clinton rawpoll_trump rawpoll_johnson rawpoll_mcmullin
+1     A+       2220         lv           47.00         43.00            4.00    NA
+2      B      26574         lv           38.03         35.69            5.46    NA
+3     A-       2195         lv           42.00         39.00            6.00    NA
+4      B       3677         lv           45.00         41.00            5.00    NA
+5     B-      16639         rv           47.00         43.00            3.00    NA
+6      A       1295         lv           48.00         44.00            3.00    NA
+7     A-       1426         lv           45.00         41.00            5.00    NA
+8     A-       1282         lv           44.00         40.00            6.00    NA
+9   <NA>       8439         lv           46.00         44.00            6.00    NA
+10    A-       1107         lv           41.20         42.70            7.10    NA
+   adjpoll_clinton adjpoll_trump adjpoll_johnson adjpoll_mcmullin
+1         45.20163      41.72430        4.626221               NA
+2         43.34557      41.21439        5.175792               NA
+3         42.02638      38.81620        6.844734               NA
+4         45.65676      40.92004        6.069454               NA
+5         46.84089      42.33184        3.726098               NA
+6         49.02208      43.95631        3.057876               NA
+7         45.11649      40.92722        4.341786               NA
+8         43.58576      40.77325        5.365788               NA
+9         44.82594      41.59978        7.870127               NA
+10        42.92745      42.23545        6.316175               NA
+
+> total_na <- sum(is.na(polls_us_election_2016))
+> print(paste("Total number of NA values in the dataset:", total_na))
+[1] 11604
+
+
+> polls_us_election_2016[sapply(polls_us_election_2016, is.numeric)] <- lapply(
++     polls_us_election_2016[sapply(polls_us_election_2016, is.numeric)],
++     function(x) ifelse(is.na(x), 2001, x)
++ )
+
+> polls_us_election_2016[sapply(polls_us_election_2016, is.character)] <- lapply(
++     polls_us_election_2016[sapply(polls_us_election_2016, is.character)],
++     function(x) ifelse(is.na(x), "Melike", x)
++ )
+
+> polls_us_election_2016[sapply(polls_us_election_2016, is.factor)] <- lapply(
++     polls_us_election_2016[sapply(polls_us_election_2016, is.factor)],
++     function(x) as.factor(ifelse(is.na(x), "Melike", as.character(x)))
++ )
+
+> modified_polls <- polls_us_election_2016
+> head(modified_polls, 10)
+
+state  startdate    enddate                                           pollster
+1        U.S. 2016-11-03 2016-11-06                   ABC News/Washington Post
+2        U.S. 2016-11-01 2016-11-07                    Google Consumer Surveys
+3        U.S. 2016-11-02 2016-11-06                                      Ipsos
+4        U.S. 2016-11-04 2016-11-07                                     YouGov
+5        U.S. 2016-11-03 2016-11-06                           Gravis Marketing
+6        U.S. 2016-11-03 2016-11-06  Fox News/Anderson Robbins Research/Shaw & Company Research
+7        U.S. 2016-11-02 2016-11-06                     CBS News/New York Times
+8        U.S. 2016-11-03 2016-11-05                NBC News/Wall Street Journal
+9  New Mexico 2016-11-06 2016-11-06                                    Zia Poll
+10       U.S. 2016-11-04 2016-11-07                                    IBD/TIPP
+grade samplesize population rawpoll_clinton rawpoll_trump rawpoll_johnson rawpoll_mcmullin
+1      A+       2220         lv           47.00         43.00            4.00 2001
+2       B      26574         lv           38.03         35.69            5.46 2001
+3      A-       2195         lv           42.00         39.00            6.00 2001
+4       B       3677         lv           45.00         41.00            5.00 2001
+5      B-      16639         rv           47.00         43.00            3.00 2001
+6       A       1295         lv           48.00         44.00            3.00 2001
+7      A-       1426         lv           45.00         41.00            5.00 2001
+8      A-       1282         lv           44.00         40.00            6.00 2001
+9  Melike       8439         lv           46.00         44.00            6.00 2001
+10     A-       1107         lv           41.20         42.70            7.10 2001
+   adjpoll_clinton adjpoll_trump adjpoll_johnson adjpoll_mcmullin
+1         45.20163      41.72430        4.626221             2001
+2         43.34557      41.21439        5.175792             2001
+3         42.02638      38.81620        6.844734             2001
+4         45.65676      40.92004        6.069454             2001
+5         46.84089      42.33184        3.726098             2001
+6         49.02208      43.95631        3.057876             2001
+7         45.11649      40.92722        4.341786             2001
+8         43.58576      40.77325        5.365788             2001
+9         44.82594      41.59978        7.870127             2001
+10        42.92745      42.23545        6.316175             2001
+
+> remaining_na <- sum(is.na(modified_polls))
+> print(paste("Total number of NA values remaining in the modified data frame:", remaining_na))
+
+[1] 0
+```

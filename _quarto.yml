@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "[Student/Group Full Name]'s Analytics Lab"
+  title: "[Sündüs Melike ÇAPUR]'s WebPage "
   navbar:
     search: true
     left:
@@ -22,11 +22,11 @@ website:
             
     tools:
       - icon: github
-        href: https://twitter.com
-      - icon: twitter
-        href: https://twitter.com
+        href: https://github.com/melikecapur
+      - icon: instagram
+        href: https://www.instagram.com/melike.cprr
       - icon: linkedin
-        href: https://linkedin.com
+        href: https://www.linkedin.com/in/melike-çapur
 
   sidebar:
     - title: "Assignments"
@@ -46,9 +46,10 @@ format:
     toc: true
     toc-location: left
     theme: 
-      light: pulse 
-      dark: superhero
+      light: darkly       
+      dark: cosmo        
     css: styles.css
+
 
 
 editor: visual

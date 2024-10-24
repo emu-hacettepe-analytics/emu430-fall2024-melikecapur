@@ -3,28 +3,40 @@ title: "About Me"
 sidebar: false 
 ---
 
+My name is Sündüs Melike ÇAPUR. You can find my CV [here](assets/sundus%20melike%20capur%20cv.pdf).
+
 # Education
 
--   B.S., Industrial Engineering, Hacettepe University, Turkey, 20xx - ongoing.
+-   B.S., Industrial Engineering, Hacettepe University, Turkey, 2020 - ongoing.
 
-# Work Experience
+-   A.S., Brand Communication, Anadolu University, Turkey, 2024-ongoing.
 
-## Employements
+-   High School, Buyuksehir Huseyin Yildiz Anatolian High School,Turkey, 2015-2019.
 
-1.  Firm xxx, position xx, year xxx
+# Internships
 
-2.  Firm yyy, position yyy, year yyy
+-   Samet Kalıp ve Madeni Eşya SAN ve TİC. A.Ş., Process Management Intern, 2023.
 
-## Internships
+# Volunteering
 
-1.  Firm aaa, position xx, year xxx
+-   Hacettepe Industry and System Society, Active Member, 2021-2023
 
-2.  Firm bbb, position yyy, year yyy
-
-# Projects
+-   WWF, Project Volunteer, 2023
 
 # Competencies
 
-R, Quarto, Git, Python
+-   R, Python, SQL
+
+-   AutoCAD, Microsoft Office Programs
+
+-   Quarto, Githab
+
+-   Canva
 
 # Hobbies
+
+-   Drawing (sketch, digital, pixel)
+
+-   Photography
+
+# 
