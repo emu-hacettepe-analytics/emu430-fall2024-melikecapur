@@ -1,0 +1,163 @@
+# Gerekli kütüphaneleri yükle
+if (!requireNamespace("rvest", quietly = TRUE)) install.packages("rvest")
+if (!requireNamespace("tibble", quietly = TRUE)) install.packages("tibble")
+if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
+if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")
+if (!requireNamespace("httr", quietly = TRUE)) install.packages("httr")
+if (!requireNamespace("ggplot2", quietly = TRUE)) install.packages("ggplot2")
+
+library(rvest)
+library(tibble)
+library(stringr)
+library(dplyr)
+library(httr)
+library(ggplot2)
+
+# IMDb verilerini bir URL'den çekmek için fonksiyon
+scrape_imdb_from_url <- function(url) {
+  tryCatch({
+    # Kullanıcı Aracı Belirleme
+    HEADERS <- c('User-Agent' = 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148')
+    
+    # HTTP yanıtını kontrol et
+    response <- GET(url, add_headers(.headers = HEADERS))
+    if (http_status(response)$category != "Success") {
+      stop(paste("HTTP isteği başarısız oldu:", http_status(response)$message))
+    }
+    
+    # HTML sayfasını oku
+    page <- read_html(response)
+    
+    # Film başlıkları
+    titles <- page %>%
+      html_nodes('h3.ipc-title__text') %>%
+      html_text(trim = TRUE)
+    
+    # Film yılları
+    years <- page %>%
+      html_nodes('span.sc-300a8231-7.eaXxft.dli-title-metadata-item') %>%
+      html_text(trim = TRUE) %>%
+      str_extract("\\d{4}") %>%
+      as.numeric()
+    
+    # IMDb puanları
+    ratings <- page %>%
+      html_nodes('span.ipc-rating-star--rating') %>%
+      html_text(trim = TRUE) %>%
+      as.numeric()
+    
+    # Oy sayıları
+    votes <- page %>%
+      html_nodes('span.ipc-rating-star--voteCount') %>%
+      html_text(trim = TRUE) %>%
+      str_replace_all(",", "") %>%
+      str_extract("\\d+") %>%
+      as.numeric()
+    
+    # Veri çerçevesi oluştur
+    data_length <- min(length(titles), length(years), length(ratings), length(votes))
+    tibble(
+      Title = titles[1:data_length],
+      Year = years[1:data_length],
+      Rating = ratings[1:data_length],
+      Votes = votes[1:data_length]
+    )
+  }, error = function(e) {
+    message(paste("Hata oluştu:", url, "-", e$message))
+    return(tibble())
+  })
+}
+
+# IMDb URL'leri
+urls <- c(
+  "https://www.imdb.com/search/title/?title_type=feature&countries=tr&count=250&num_votes=2500,&release_date=2010-01-01,2023-12-31",
+  "https://www.imdb.com/search/title/?title_type=feature&countries=tr&count=250&num_votes=2500,&release_date=,2009-12-31"
+)
+
+# URL'lerden veriyi çek
+imdb_data <- bind_rows(lapply(urls, scrape_imdb_from_url))
+
+# Manuel olarak eksik yılları doldur
+imdb_data <- imdb_data %>%
+  mutate(Year = case_when(
+    Title == "2. Aftersun" ~ 2022,
+    Title == "3. Skyfall" ~ 2012,
+    Title == "5. Operation Fortune: Ruse de Guerre" ~ 2023,
+    Title == "6. Kuru Otlar Üstüne" ~ 2023,
+    Title == "8. Yedinci Kogustaki Mucize" ~ 2019,
+    Title == "9. Cebimdeki Yabanci" ~ 2018,
+    Title == "11. Abluka" ~ 2015,
+    Title == "12. Kis Uykusu" ~ 2014,
+    Title == "14. Club Zero" ~ 2023,
+    Title == "15. Baskin" ~ 2015,
+    Title == "17. Bir Zamanlar Anadolu'da" ~ 2011,
+    Title == "18. Mustang" ~ 2015,
+    Title == "20. Quo Vadis, Aida?" ~ 2020,
+    Title == "21. Istanbul Için Son Çagri" ~ 2023,
+    Title == "23. Ahlat Agaci" ~ 2018,
+    Title == "24. Hundraåringen som klev ut genom fönstret och försvann" ~ 2013,
+    Title == "2. The International" ~ 2009,
+    Title == "3. Günesi Gördüm" ~ 2009,
+    Title == "5. Babam ve Oglum" ~ 2005,
+    Title == "6. G.O.R.A." ~ 2004,
+    Title == "8. Barda" ~ 2007,
+    Title == "9. Uzak" ~ 2002,
+    Title == "11. Eskiya" ~ 1996,
+    Title == "12. Masumiyet" ~ 1997,
+    Title == "14. Issiz Adam" ~ 2008,
+    Title == "15. Uçurtmayi Vurmasinlar" ~ 1989,
+    Title == "17. Yol" ~ 1982,
+    Title == "18. Harem Suare" ~ 1999,
+    Title == "20. Vavien" ~ 2009,
+    Title == "21. Kolpaçino" ~ 2009,
+    Title == "23. Hamam" ~ 1997,
+    Title == "24. Nefes" ~ 2009,
+    TRUE ~ Year
+  ))
+
+# Eksik yılların olup olmadığını kontrol et
+if (!dir.exists("Users/Desktop/Melik")) {
+  dir.create("Users/Desktop/Melik", recursive = TRUE)
+}
+
+if (any(is.na(imdb_data$Year))) {
+  warning("Bazı kayıtların yıl bilgisi eksik. Manuel kontrol yapmayı unutmayın.")
+}
+
+# --- Verilerin Analizi ve Görselleştirme ---
+
+# En yüksek ve en düşük puanlı filmler
+top_5 <- imdb_data %>% arrange(desc(Rating)) %>% slice(1:5)
+bottom_5 <- imdb_data %>% arrange(Rating) %>% slice(1:5)
+
+# Yıllara göre IMDb puanlarının ortalaması
+yearly_ratings <- imdb_data %>%
+  group_by(Year) %>%
+  summarise(Average_Rating = mean(Rating, na.rm = TRUE),
+            Movie_Count = n())
+
+# Yıllara göre scatter plot
+scatter_plot <- ggplot(yearly_ratings, aes(x = Year, y = Average_Rating)) +
+  geom_point(size = 2) +
+  geom_line() +
+  labs(title = "Yıllara Göre IMDb Puanlarının Ortalaması",
+       x = "Yıl",
+       y = "Ortalama IMDb Puanı") +
+  theme_minimal()
+
+# Plot'u ekranda göster
+print(scatter_plot)
+
+# Plot'u dosyaya kaydet
+ggsave("Users/Desktop/Melik/average_rating_by_year.png", scatter_plot, width = 8, height = 6)
+
+# Oy sayısı ve IMDb puanı arasındaki ilişki
+correlation <- cor(imdb_data$Votes, imdb_data$Rating, use = "complete.obs")
+
+# Çıktılar
+write.csv(top_5, "Users/Desktop/Melik/top_5_movies.csv", row.names = FALSE)
+write.csv(bottom_5, "Users/Desktop/Melik/bottom_5_movies.csv", row.names = FALSE)
+
+print("En yüksek puanlı 5 film kaydedildi: ~/Desktop/Melik/top_5_movies.csv")
+print("En düşük puanlı 5 film kaydedildi: ~/Desktop/Melik/bottom_5_movies.csv")
+print(paste("Oy sayısı ve IMDb puanı arasındaki korelasyon:", correlation))
